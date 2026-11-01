@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>گزارش فاز اول پروژه سامانه مدیریت کتابخانه</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<style>
+:root{--ink:#172b4d;--muted:#61728b;--blue:#2457a7;--teal:#168b83;--gold:#d19a36;--paper:#fff;--wash:#f3f6fb;--line:#dfe6f0}
+*{box-sizing:border-box}body{margin:0;background:var(--wash);color:var(--ink);font:15px/2 "Vazirmatn",Tahoma,sans-serif}
+.wrap{max-width:1100px;margin:auto;padding:28px}
+.cover{background:linear-gradient(125deg,#10284b,#1d4d87 65%,#147a79);color:white;border-radius:24px;padding:58px 56px;min-height:330px}
+.eyebrow{color:#a9dcd8;font-weight:700;font-size:13px}.cover h1{font-size:42px;line-height:1.5;margin:22px 0 8px}.cover p{color:#e2edf8;max-width:760px}
+.pills{display:flex;gap:10px;flex-wrap:wrap;margin-top:28px}.pill{border:1px solid #ffffff55;border-radius:30px;padding:4px 13px;font-size:12px}
+section,.toc{background:white;border:1px solid var(--line);border-radius:18px;padding:28px 32px;margin-top:22px}
+h2{font-size:24px;color:#173b69;margin:0 0 12px}h3{font-size:18px;color:#20527f;margin:24px 0 8px}
+.kicker{color:var(--teal);font-size:12px;font-weight:800}.toc ol{margin:6px 0;padding-right:24px}.toc a{color:var(--blue);text-decoration:none}
+p{margin:8px 0}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.tile{background:#f6f9fd;border:1px solid #e5edf6;border-radius:12px;padding:14px}.tile b{display:block;color:#20527f}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14px}th,td{border:1px solid #dfe6f0;padding:9px 11px;text-align:right;vertical-align:top}th{background:#edf3fa;color:#183f6d}
+code{direction:ltr;unicode-bidi:embed;background:#f0f3f8;padding:1px 5px;border-radius:4px;font-family:Consolas,monospace}
+.note{background:#fff8e8;border:1px solid #f2e2bb;border-radius:10px;padding:12px 15px;color:#67501e;margin:14px 0;font-size:13px}
+.process{padding:0;overflow:hidden}.process header{padding:24px 30px;background:#f8fbff;border-bottom:1px solid var(--line)}.process .body{padding:24px 30px}
+.diagram{direction:ltr;overflow:auto;background:#fcfdff;border:1px solid #e1e8f1;border-radius:12px;padding:16px;margin:14px 0}.mermaid{min-width:760px;text-align:center}
+.steps{padding-right:22px}.small{font-size:13px;color:var(--muted)}
+footer{text-align:center;color:#7a899c;font-size:12px;padding:22px}
+@media(max-width:720px){.wrap{padding:12px}.cover{padding:30px 24px}.cover h1{font-size:30px}.grid{grid-template-columns:1fr}section,.toc{padding:20px}.process .body,.process header{padding:18px}}
+@media print{body{background:#fff;font-size:11px}.wrap{max-width:none;padding:0}.cover{border-radius:0;break-after:page}.toc{break-after:page}section{box-shadow:none;break-inside:auto}.process{break-inside:avoid}.diagram{overflow:visible}.mermaid{min-width:0}a{color:inherit}}
+</style>
+</head>
+<body>
+<main class="wrap">
+<div class="cover">
+<div class="eyebrow">پروژه نهایی درس برنامه‌نویسی وب · مستند فاز اول</div>
+<h1>طراحی سامانه مدیریت کتابخانه</h1>
+<p>تعریف وب‌اپلیکیشن‌ها، طراحی فرآیندهای اصلی و طراحی مدل‌های پایگاه داده</p>
+<div class="pills"><span class="pill">فاز اول پروژه</span><span class="pill">۳ اپلیکیشن اصلی</span><span class="pill">۳ نمودار فرآیندی</span><span class="pill">طراحی مدل و روابط</span></div>
+</div>
+
+<nav class="toc">
+<div class="kicker">فهرست مطالب</div><h2>راهنمای گزارش</h2>
+<ol>
+<li><a href="#intro">معرفی سامانه و محدوده پروژه</a></li>
+<li><a href="#apps">تعریف وب‌اپلیکیشن‌ها</a></li>
+<li><a href="#processes">طراحی فرآیندهای وب‌اپلیکیشن‌ها</a></li>
+<li><a href="#models">طراحی و تعریف مدل‌ها</a></li>
+<li><a href="#relations">روابط مدل‌ها و نمودار ER</a></li>
+<li><a href="#rules">قواعد و محدودیت‌های داده</a></li>
+<li><a href="#summary">جمع‌بندی</a></li>
+</ol>
+</nav>
+
+<section id="intro">
+<div class="kicker">بخش اول · معرفی</div><h2>۱. معرفی سامانه و محدوده پروژه</h2>
+<p>هدف پروژه، طراحی و پیاده‌سازی یک سامانه تحت وب برای مدیریت اطلاعات کتابخانه و گردش امانت کتاب است. سامانه دو گروه کاربری اصلی، یعنی <b>عضو کتابخانه</b> و <b>کتابدار</b>، دارد. اعضا می‌توانند کتاب‌ها را مشاهده و جست‌وجو کنند، وضعیت موجودی را ببینند، درخواست امانت ثبت کنند، امانت‌های خود را پیگیری کنند و در صورت مجاز بودن درخواست تمدید بدهند. کتابدار نیز مسئول مدیریت اطلاعات کتاب، مشاهده اعضا، رسیدگی به امانت‌ها، ثبت بازگشت کتاب و تعیین جریمه دیرکرد طبق ضوابط کتابخانه است.</p>
+<p>این سند فقط طراحی فاز اول را پوشش می‌دهد؛ بنابراین تمرکز آن بر تفکیک اپلیکیشن‌ها، ترسیم فرآیندهای کسب‌وکار و تعیین ساختار داده‌هاست و وارد جزئیات پیاده‌سازی صفحات و کدنویسی نمی‌شود.</p>
+<div class="grid">
+<div class="tile"><b>عضو کتابخانه</b>مشاهده کتاب‌ها، جست‌وجو، درخواست امانت و تمدید، مشاهده امانت‌های خود.</div>
+<div class="tile"><b>کتابدار</b>مدیریت کتاب‌ها و اعضا، بررسی درخواست‌ها، ثبت تحویل و بازگشت، ثبت جریمه.</div>
+<div class="tile"><b>سامانه</b>اعتبارسنجی درخواست‌ها، کنترل موجودی و موعد، ذخیره اطلاعات و نمایش نتیجه.</div>
+</div>
+</section>
+
+<section id="apps">
+<div class="kicker">بخش دوم · تفکیک سامانه</div><h2>۲. تعریف وب‌اپلیکیشن‌ها</h2>
+<p>برای سازمان‌دهی بهتر کدها و جداکردن مسئولیت‌ها، سامانه در قالب سه اپلیکیشن مستقل Django طراحی می‌شود. هر اپلیکیشن بخشی مشخص از منطق سامانه را مدیریت می‌کند و از طریق مدل‌ها و ارتباطات پایگاه داده با بخش‌های دیگر در ارتباط است.</p>
+<table>
+<thead><tr><th>نام اپلیکیشن</th><th>مسئولیت اصلی</th><th>قابلیت‌ها و اجزای تحت پوشش</th></tr></thead>
+<tbody>
+<tr><td><code>accounts</code></td><td>مدیریت کاربران و حساب‌های کاربری</td><td>ثبت‌نام و ورود، خروج، پروفایل عضو، تعیین نقش کاربر (عضو یا کتابدار)، مشاهده و مدیریت اطلاعات اعضا.</td></tr>
+<tr><td><code>catalog</code></td><td>مدیریت مجموعه کتابخانه</td><td>ثبت و ویرایش اطلاعات کتاب، نویسنده و دسته‌بندی؛ نمایش فهرست کتاب‌ها؛ جست‌وجو بر اساس عنوان، نویسنده و موضوع؛ نمایش موجودی.</td></tr>
+<tr><td><code>loans</code></td><td>مدیریت گردش امانت</td><td>ثبت درخواست و امانت، مشاهده امانت‌های فعال، تمدید امانت، ثبت بازگشت، محاسبه و ثبت جریمه دیرکرد.</td></tr>
+</tbody></table>
+<div class="note"><b>نکته معماری:</b> منظور از اپلیکیشن در این سند، اپلیکیشن داخلی پروژه Django است، نه سه وب‌سایت جداگانه. هر سه اپلیکیشن در یک سامانه واحد فعالیت می‌کنند. احراز هویت پایه در <code>accounts</code> قرار می‌گیرد و سایر بخش‌ها از اطلاعات کاربر استفاده می‌کنند.</div>
+</section>
+
+<section id="processes">
+<div class="kicker">بخش سوم · گردش کار</div><h2>۳. طراحی فرآیندهای وب‌اپلیکیشن‌ها</h2>
+<p>در این بخش، فرآیندهای اصلی و مستقل سامانه از ابتدا تا پایان نمایش داده شده‌اند. ثبت‌نام، ورود، جست‌وجوی ساده و عملیات معمول افزودن/ویرایش/حذف به‌عنوان فعالیت‌های روتین، نمودار مستقل ندارند. در هر نمودار، نقش عضو، کتابدار، سامانه و پایگاه داده از یکدیگر تفکیک شده‌اند و مسیرهای جایگزین و خطا نیز مشخص شده‌اند.</p>
+
+<article class="process" id="borrow">
+<header><div class="kicker">فرآیند ۱</div><h2>۳-۱. درخواست امانت کتاب</h2><div class="small">هدف: ثبت امانت معتبر برای کتاب دارای نسخه قابل امانت.</div></header>
+<div class="body">
+<p><b>نقش‌ها:</b> عضو کتابخانه، سامانه، کتابدار و پایگاه داده.</p>
+<ol class="steps"><li>عضو کتاب موردنظر را انتخاب و درخواست امانت ارسال می‌کند.</li><li>سامانه وضعیت عضویت و شرایط امانت را بررسی می‌کند.</li><li>در صورت واجد شرایط بودن عضو، موجودی قابل امانت کنترل می‌شود.</li><li>اگر نسخه آزاد وجود داشته باشد، درخواست برای تحویل به کتابدار ارجاع می‌شود.</li><li>پس از تأیید و تحویل نسخه، امانت و موعد بازگشت ثبت می‌شود؛ در غیر این صورت علت عدم انجام درخواست به عضو اعلام می‌شود.</li></ol>
+<div class="diagram"><pre class="mermaid">flowchart TB
+ subgraph M[عضو کتابخانه]
+  direction TB
+  A([شروع]) --> B[انتخاب کتاب و ارسال درخواست]
+  K[دریافت نتیجه درخواست] --> Z([پایان])
+ end
+ subgraph S[سامانه]
+  direction TB
+  C[اعتبارسنجی درخواست و وضعیت عضویت]
+  D{عضو واجد شرایط است؟}
+  E[اعلام عدم امکان امانت]
+  F[بررسی موجودی قابل امانت]
+  G{نسخه آزاد موجود است؟}
+  H[ثبت درخواست جهت تحویل]
+  I[ثبت امانت و موعد بازگشت]
+  J[اعلام نبود نسخه آزاد]
+ end
+ subgraph L[کتابدار]
+  direction TB
+  L1[بررسی درخواست و تحویل نسخه]
+  L2{تحویل و تأیید انجام شد؟}
+  L3[ثبت علت عدم تحویل یا رد]
+ end
+ subgraph DB[پایگاه داده]
+  direction TB
+  P[(ثبت وضعیت درخواست)]
+  Q[(ذخیره امانت، کتاب و موعد بازگشت)]
+ end
+ B --> C --> D
+ D -- خیر --> E --> K
+ D -- بله --> F --> G
+ G -- خیر --> J --> K
+ G -- بله --> H --> P --> L1 --> L2
+ L2 -- خیر --> L3 --> P --> K
+ L2 -- بله --> I --> Q --> K
+</pre></div>
+<div class="note">تأیید و تحویل توسط کتابدار در این نمودار به‌عنوان رویه عملیاتی پیشنهادی در نظر گرفته شده است. اگر در سیاست کتابخانه امانت بدون تأیید دستی انجام شود، این مرحله در طراحی نهایی حذف یا خودکار می‌شود.</div>
+</div>
+</article>
+
+<article class="process" id="renew">
+<header><div class="kicker">فرآیند ۲</div><h2>۳-۲. درخواست تمدید امانت</h2><div class="small">هدف: افزایش مهلت بازگشت امانت، فقط در صورت رعایت ضوابط کتابخانه.</div></header>
+<div class="body">
+<p><b>نقش‌ها:</b> عضو کتابخانه، سامانه، کتابدار و پایگاه داده.</p>
+<ol class="steps"><li>عضو یکی از امانت‌های فعال خود را انتخاب و درخواست تمدید ارسال می‌کند.</li><li>سامانه مالکیت امانت و فعال بودن آن را بررسی می‌کند.</li><li>قواعد تمدید، مانند سقف دفعات تمدید و وجود رزرو معوق، کنترل می‌شوند.</li><li>در صورت مجاز بودن، درخواست برای بررسی کتابدار ارسال می‌شود.</li><li>در صورت تأیید، موعد جدید ذخیره می‌شود؛ در صورت رد، دلیل اعلام و موعد قبلی حفظ می‌شود.</li></ol>
+<div class="diagram"><pre class="mermaid">flowchart TB
+ subgraph M[عضو کتابخانه]
+  direction TB
+  A([شروع]) --> B[انتخاب امانت فعال و درخواست تمدید]
+  K[مشاهده نتیجه و موعد بازگشت] --> Z([پایان])
+ end
+ subgraph S[سامانه]
+  direction TB
+  C[یافتن امانت و اعتبارسنجی درخواست]
+  D{امانت فعال و متعلق به عضو است؟}
+  E[رد درخواست نامعتبر و اعلام علت]
+  F[بررسی قواعد تمدید کتابخانه]
+  G{شرایط تمدید برقرار است؟}
+  H[اعلام عدم امکان تمدید]
+  I[ارسال درخواست مجاز به کتابدار]
+  J[محاسبه موعد جدید]
+  N[ثبت تمدید و موعد جدید]
+ end
+ subgraph L[کتابدار]
+  direction TB
+  L1[بررسی درخواست تمدید]
+  L2{تمدید تأیید می‌شود؟}
+  L3[ثبت علت رد]
+ end
+ subgraph DB[پایگاه داده]
+  direction TB
+  P[(خواندن سابقه امانت)]
+  Q[(ثبت تصمیم و موعد جدید یا علت رد)]
+ end
+ B --> C --> P --> D
+ D -- خیر --> E --> K
+ D -- بله --> F --> G
+ G -- خیر --> H --> K
+ G -- بله --> I --> L1 --> L2
+ L2 -- خیر --> L3 --> Q --> K
+ L2 -- بله --> J --> N --> Q --> K
+</pre></div>
+<div class="note">سقف دفعات تمدید، مدت تمدید و تأثیر رزرو سایر اعضا باید مطابق قوانین نهایی کتابخانه تعیین شوند. نمودار از تعیین عدد یا قانون فرضی خودداری می‌کند.</div>
+</div>
+</article>
+
+<article class="process" id="return">
+<header><div class="kicker">فرآیند ۳</div><h2>۳-۳. بازگشت کتاب و محاسبه جریمه دیرکرد</h2><div class="small">هدف: ثبت بازگشت صحیح، تعیین جریمه دیرکرد و به‌روزرسانی وضعیت نسخه.</div></header>
+<div class="body">
+<p><b>نقش‌ها:</b> عضو کتابخانه، کتابدار، سامانه و پایگاه داده.</p>
+<ol class="steps"><li>عضو نسخه کتاب را به کتابدار تحویل می‌دهد.</li><li>کتابدار امانت فعال را پیدا می‌کند و نسخه تحویلی را با آن تطبیق می‌دهد.</li><li>سامانه تاریخ واقعی بازگشت را با موعد مقایسه می‌کند و جریمه دیرکرد را طبق ضابطه مصوب محاسبه می‌کند.</li><li>کتابدار وضعیت فیزیکی نسخه را بررسی و بازگشت را تأیید می‌کند.</li><li>امانت بسته می‌شود. نسخه سالم به موجودی قابل امانت برمی‌گردد؛ نسخه آسیب‌دیده در وضعیت غیرقابل امانت/نیازمند بررسی ثبت می‌شود.</li></ol>
+<div class="diagram"><pre class="mermaid">flowchart TB
+ subgraph M[عضو کتابخانه]
+  direction TB
+  A([شروع]) --> B[تحویل نسخه به کتابدار]
+  K[دریافت رسید و نتیجه جریمه] --> Z([پایان])
+ end
+ subgraph L[کتابدار]
+  direction TB
+  L1[یافتن امانت فعال و تطبیق نسخه]
+  L2{نسخه با امانت تطبیق دارد؟}
+  L3[ثبت مغایرت و ارجاع برای بررسی]
+  L4[بررسی وضعیت فیزیکی نسخه]
+  L5{نسخه آسیب‌دیده است؟}
+ end
+ subgraph S[سامانه]
+  direction TB
+  C[خواندن موعد و ثبت تاریخ واقعی بازگشت]
+  D{بازگشت با تأخیر است؟}
+  E[محاسبه جریمه طبق ضابطه مصوب]
+  F[ثبت جریمه صفر]
+  G[بستن امانت و ثبت بازگشت]
+  H[ثبت نسخه به‌عنوان قابل امانت]
+  I[ثبت نسخه به‌عنوان غیرقابل امانت]
+  J[نمایش نتیجه و رسید]
+ end
+ subgraph DB[پایگاه داده]
+  direction TB
+  P[(ثبت بازگشت و جریمه)]
+  Q[(به‌روزرسانی وضعیت نسخه و موجودی)]
+ end
+ B --> L1 --> L2
+ L2 -- خیر --> L3 --> J --> K
+ L2 -- بله --> C --> D
+ D -- بله --> E --> G
+ D -- خیر --> F --> G
+ G --> L4 --> L5
+ L5 -- خیر، سالم --> H --> Q
+ L5 -- بله، آسیب‌دیده --> I --> Q
+ Q --> P --> J --> K
+</pre></div>
+<div class="note">اگر نسخه با امانت تطبیق نداشته باشد، امانت بسته نمی‌شود و موجودی تغییر نمی‌کند. اگر نسخه آسیب‌دیده باشد، بازگشت ثبت می‌شود اما آن نسخه تا تعیین تکلیف، به موجودی قابل امانت اضافه نمی‌شود. جریمه خسارت احتمالی از جریمه دیرکرد جداست و مبلغ آن در این فاز تعیین نشده است.</div>
+</div>
+</article>
+</section>
+
+<section id="models">
+<div class="kicker">بخش چهارم · طراحی پایگاه داده</div><h2>۴. طراحی و تعریف مدل‌ها</h2>
+<p>مدل‌ها ساختار داده‌های اصلی سامانه را مشخص می‌کنند. طراحی زیر با ساختار اپلیکیشن‌های معرفی‌شده هماهنگ است و از مدل کاربر داخلی Django برای اطلاعات ورود و احراز هویت استفاده می‌کند. اطلاعات تکمیلی و نقش هر کاربر در مدل <code>UserProfile</code> نگهداری می‌شود.</p>
+
+<h3>۴-۱. اپلیکیشن accounts</h3>
+<table><thead><tr><th>مدل</th><th>فیلد</th><th>نوع داده پیشنهادی</th><th>توضیح</th></tr></thead><tbody>
+<tr><td rowspan="4"><code>UserProfile</code></td><td><code>user</code></td><td>OneToOneField → User</td><td>ارتباط یک‌به‌یک با کاربر داخلی Django.</td></tr>
+<tr><td><code>phone</code></td><td>CharField</td><td>شماره تماس کاربر؛ در صورت نیاز یکتا.</td></tr>
+<tr><td><code>role</code></td><td>CharField / choices</td><td>نقش کاربر: عضو یا کتابدار.</td></tr>
+<tr><td><code>created_at</code></td><td>DateTimeField</td><td>زمان ایجاد پروفایل.</td></tr>
+</tbody></table>
+
+<h3>۴-۲. اپلیکیشن catalog</h3>
+<table><thead><tr><th>مدل</th><th>فیلد</th><th>نوع داده پیشنهادی</th><th>توضیح</th></tr></thead><tbody>
+<tr><td rowspan="3"><code>Author</code></td><td><code>first_name</code></td><td>CharField</td><td>نام نویسنده.</td></tr>
+<tr><td><code>last_name</code></td><td>CharField</td><td>نام خانوادگی نویسنده.</td></tr>
+<tr><td><code>bio</code></td><td>TextField (اختیاری)</td><td>زندگی‌نامه یا توضیح کوتاه.</td></tr>
+<tr><td rowspan="2"><code>Category</code></td><td><code>name</code></td><td>CharField</td><td>عنوان موضوع یا دسته‌بندی؛ بهتر است یکتا باشد.</td></tr>
+<tr><td><code>description</code></td><td>TextField (اختیاری)</td><td>توضیح دسته‌بندی.</td></tr>
+<tr><td rowspan="9"><code>Book</code></td><td><code>title</code></td><td>CharField</td><td>عنوان کتاب.</td></tr>
+<tr><td><code>author</code></td><td>ForeignKey → Author</td><td>نویسنده کتاب.</td></tr>
+<tr><td><code>category</code></td><td>ForeignKey → Category</td><td>موضوع یا دسته‌بندی کتاب.</td></tr>
+<tr><td><code>isbn</code></td><td>CharField</td><td>شناسه شابک؛ در صورت وجود یکتا.</td></tr>
+<tr><td><code>summary</code></td><td>TextField (اختیاری)</td><td>خلاصه یا معرفی کتاب.</td></tr>
+<tr><td><code>publisher</code></td><td>CharField</td><td>نام ناشر.</td></tr>
+<tr><td><code>published_year</code></td><td>PositiveIntegerField</td><td>سال انتشار.</td></tr>
+<tr><td><code>stock</code></td><td>PositiveIntegerField</td><td>تعداد کل نسخه‌های ثبت‌شده کتاب.</td></tr>
+<tr><td><code>available_copies</code></td><td>PositiveIntegerField</td><td>تعداد نسخه‌های سالم و قابل امانت در حال حاضر.</td></tr>
+</tbody></table>
+<div class="note">در این طراحی، هر رکورد Book نماینده یک عنوان کتاب است و تعداد نسخه‌ها با دو فیلد <code>stock</code> و <code>available_copies</code> نگهداری می‌شود. برای پروژه‌ای که نیاز به شناسایی جداگانه هر نسخه، بارکد یا ثبت دقیق خسارت هر نسخه داشته باشد، می‌توان در توسعه بعدی مدل مستقلی به نام BookCopy اضافه کرد.</div>
+
+<h3>۴-۳. اپلیکیشن loans</h3>
+<table><thead><tr><th>مدل</th><th>فیلد</th><th>نوع داده پیشنهادی</th><th>توضیح</th></tr></thead><tbody>
+<tr><td rowspan="9"><code>Loan</code></td><td><code>user</code></td><td>ForeignKey → User</td><td>عضوی که کتاب را امانت گرفته است.</td></tr>
+<tr><td><code>book</code></td><td>ForeignKey → Book</td><td>کتاب امانت‌گرفته‌شده.</td></tr>
+<tr><td><code>borrow_date</code></td><td>DateField</td><td>تاریخ شروع امانت.</td></tr>
+<tr><td><code>due_date</code></td><td>DateField</td><td>تاریخ سررسید بازگشت.</td></tr>
+<tr><td><code>return_date</code></td><td>DateField (nullable)</td><td>تاریخ واقعی بازگشت؛ تا قبل از بازگشت خالی است.</td></tr>
+<tr><td><code>status</code></td><td>CharField / choices</td><td>وضعیت امانت: در انتظار، فعال، بازگشت‌شده یا ردشده.</td></tr>
+<tr><td><code>renew_count</code></td><td>PositiveIntegerField</td><td>تعداد دفعات تمدید انجام‌شده.</td></tr>
+<tr><td><code>fine_amount</code></td><td>DecimalField</td><td>مبلغ جریمه دیرکرد؛ در صورت نداشتن جریمه صفر.</td></tr>
+<tr><td><code>created_at</code></td><td>DateTimeField</td><td>زمان ثبت رکورد امانت.</td></tr>
+</tbody></table>
+<p>در مدل Loan، ارتباط کاربر به مدل داخلی User برقرار می‌شود؛ در نتیجه هر امانت به یک عضو و یک کتاب تعلق دارد. فیلد <code>fine_amount</code> برای ثبت جریمه دیرکرد همان امانت در نظر گرفته شده است و قواعد محاسبه آن باید در منطق سامانه تعیین شوند.</p>
+</section>
+
+<section id="relations">
+<div class="kicker">بخش پنجم · ارتباطات</div><h2>۵. روابط مدل‌ها و نمودار ER</h2>
+<table><thead><tr><th>رابطه</th><th>نوع رابطه</th><th>شرح</th></tr></thead><tbody>
+<tr><td>User ↔ UserProfile</td><td>یک‌به‌یک (One-to-One)</td><td>هر حساب کاربری یک پروفایل تکمیلی دارد.</td></tr>
+<tr><td>Author → Book</td><td>یک‌به‌چند (One-to-Many)</td><td>هر نویسنده می‌تواند چند کتاب داشته باشد؛ هر کتاب در این طراحی یک نویسنده اصلی دارد.</td></tr>
+<tr><td>Category → Book</td><td>یک‌به‌چند (One-to-Many)</td><td>هر دسته‌بندی می‌تواند شامل چند کتاب باشد؛ هر کتاب به یک دسته‌بندی اصلی متصل است.</td></tr>
+<tr><td>User → Loan</td><td>یک‌به‌چند (One-to-Many)</td><td>هر عضو می‌تواند چند سابقه امانت داشته باشد؛ هر امانت متعلق به یک عضو است.</td></tr>
+<tr><td>Book → Loan</td><td>یک‌به‌چند (One-to-Many)</td><td>هر کتاب می‌تواند در زمان‌های مختلف چند امانت داشته باشد؛ هر رکورد امانت به یک کتاب اشاره می‌کند.</td></tr>
+</tbody></table>
+<h3>نمودار ER مفهومی</h3>
+<div class="diagram"><pre class="mermaid">erDiagram
+ USER ||--|| USER_PROFILE : has
+ AUTHOR ||--o{ BOOK : writes
+ CATEGORY ||--o{ BOOK : groups
+ USER ||--o{ LOAN : borrows
+ BOOK ||--o{ LOAN : appears_in
+ USER {
+  int id PK
+  string username
+  string email
+ }
+ USER_PROFILE {
+  int id PK
+  int user_id FK
+  string phone
+  string role
+  datetime created_at
+ }
+ AUTHOR {
+  int id PK
+  string first_name
+  string last_name
+  text bio
+ }
+ CATEGORY {
+  int id PK
+  string name
+  text description
+ }
+ BOOK {
+  int id PK
+  string title
+  int author_id FK
+  int category_id FK
+  string isbn
+  string publisher
+  int published_year
+  int stock
+  int available_copies
+ }
+ LOAN {
+  int id PK
+  int user_id FK
+  int book_id FK
+  date borrow_date
+  date due_date
+  date return_date
+  string status
+  int renew_count
+  decimal fine_amount
+ }
+</pre></div>
+<p class="small">در نمودار، USER نماینده جدول کاربری Django است و سایر موجودیت‌ها، مدل‌های تعریف‌شده در اپلیکیشن‌های پروژه هستند. کلیدهای خارجی (FK) ارتباط بین جداول را برقرار می‌کنند.</p>
+</section>
+
+<section id="rules">
+<div class="kicker">بخش ششم · قواعد داده</div><h2>۶. قواعد و محدودیت‌های پیشنهادی</h2>
+<ul>
+<li>تعداد کل نسخه‌ها و تعداد نسخه‌های قابل امانت نباید منفی باشند و <code>available_copies</code> نباید از <code>stock</code> بیشتر شود.</li>
+<li>برای هر امانت، تاریخ سررسید باید مساوی یا بعد از تاریخ شروع امانت باشد.</li>
+<li>تا زمانی که کتاب بازگردانده نشده، <code>return_date</code> باید خالی باشد و وضعیت امانت فعال باقی بماند.</li>
+<li>پس از بازگشت موفق، تاریخ بازگشت ثبت و وضعیت امانت به «بازگشت‌شده» تغییر می‌کند.</li>
+<li>در صورت رد درخواست امانت یا تمدید، دلیل رد باید به کاربر اعلام شود و نباید موعد قبلی امانت تغییر کند.</li>
+<li>جریمه دیرکرد بر اساس اختلاف تاریخ واقعی بازگشت و موعد بازگشت و طبق ضابطه مصوب کتابخانه تعیین می‌شود؛ مبلغ و نرخ آن در این فاز مشخص نشده است.</li>
+<li>نسخه آسیب‌دیده پس از بازگشت، تا زمان تأیید سلامت یا تعمیر، در موجودی قابل امانت محاسبه نمی‌شود.</li>
+<li>حذف کتابی که سابقه امانت دارد بهتر است به‌صورت غیرفعال‌سازی انجام شود تا سوابق تاریخی حفظ شوند.</li>
+</ul>
+<div class="note">مقادیر دقیق مدت امانت، سقف تمدید، شرایط محرومیت عضو، نرخ جریمه و نحوه رسیدگی به خسارت باید با نظر کتابخانه یا استاد نهایی شوند. در این سند برای این موارد مقدار قطعی فرض نشده است.</div>
+</section>
+
+<section id="summary">
+<div class="kicker">بخش پایانی</div><h2>۷. جمع‌بندی فاز اول</h2>
+<p>در این سند، ساختار اولیه سامانه مدیریت کتابخانه در سه سطح طراحی شد: نخست، سامانه به سه اپلیکیشن <code>accounts</code>، <code>catalog</code> و <code>loans</code> تقسیم شد؛ دوم، سه فرآیند اصلی امانت، تمدید و بازگشت کتاب با مسیرهای تصمیم‌گیری و حالت‌های استثنا ترسیم شدند؛ و سوم، مدل‌های اصلی کاربران، کتاب‌ها، نویسندگان، دسته‌بندی‌ها و امانت‌ها به همراه فیلدها و روابط آن‌ها تعریف شدند.</p>
+<p>این طراحی مبنای ورود به مراحل بعدی پروژه، شامل پیاده‌سازی مدل‌ها، فرم‌ها، مسیرها، نماها و صفحات سامانه خواهد بود.</p>
+</section>
+<footer>سامانه مدیریت کتابخانه · گزارش طراحی فاز اول · درس برنامه‌نویسی وب</footer>
+</main>
+<script>
+mermaid.initialize({startOnLoad:true,securityLevel:'loose',theme:'base',flowchart:{htmlLabels:true,curve:'basis',nodeSpacing:35,rankSpacing:45,useMaxWidth:true},er:{useMaxWidth:true},themeVariables:{fontFamily:'Vazirmatn, Tahoma, sans-serif',fontSize:'14px',primaryColor:'#eef4fc',primaryTextColor:'#172b4d',primaryBorderColor:'#7594bc',lineColor:'#71829a',secondaryColor:'#e9f6f3',tertiaryColor:'#fff4d8',clusterBkg:'#f6f9fd',clusterBorder:'#bdcadb'}});
+</script>
+</body></html>
