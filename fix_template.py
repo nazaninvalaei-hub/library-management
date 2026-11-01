@@ -1,0 +1,1 @@
+﻿path = r"E:\pycharm\library\templates\catalog\book_list.html"; c = open(path, "r", encoding="utf-8").read(); c = c.replace("|default:-", ""); open(path, "w", encoding="utf-8").write(c); print("FIXED!")
